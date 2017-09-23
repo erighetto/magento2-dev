@@ -29,6 +29,10 @@ RUN docker-php-ext-configure \
     xsl \
     zip \
     opcache
+    
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && docker-php-source delete
 
 RUN {  \
     echo ';;;;;;;;;; Recommended PHP.ini settings ;;;;;;;;;;'; \
@@ -41,14 +45,14 @@ RUN {  \
     echo ';;;;;;;;;; xDebug ;;;;;;;;;;'; \
     echo 'xdebug.remote_enable = 1'; \
     echo 'xdebug.idekey = "phpstorm"'; \
-    echo 'xdebug.remote_host = 172.20.0.1'; \
     echo 'xdebug.remote_port = 9000'; \
     echo 'xdebug.remote_autostart = 0'; \
     echo 'xdebug.profiler_enable = 0'; \
     echo 'xdebug.remote_connect_back = 1'; \
+    echo 'xdebug.remote_handler=dbgp'; \
     echo 'xdebug.max_nesting_level = 256'; \
     echo ';xdebug.remote_cookie_expire_time = -9999'; \    
-	} >> /usr/local/etc/php/conf.d/custom-php-settings.ini
+	} >> /usr/local/etc/php/conf.d/custom-php-settings.ini	
 
 RUN usermod -u 1000 www-data; \
     a2enmod rewrite; \

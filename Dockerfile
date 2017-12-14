@@ -28,7 +28,8 @@ RUN docker-php-ext-configure \
     pdo_mysql \
     xsl \
     zip \
-    opcache
+    opcache \
+    soap
     
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug \

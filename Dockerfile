@@ -36,7 +36,7 @@ RUN pecl install xdebug \
 
 RUN wget https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 && \
     chmod +x mhsendmail_linux_amd64  && \
-mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail
+    mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail
 
 RUN {  \
     echo ';;;;;;;;;; Recommended PHP.ini settings ;;;;;;;;;;'; \
@@ -67,7 +67,8 @@ RUN usermod -u 1000 www-data; \
     php -r "if (hash('SHA384', file_get_contents('/tmp/composer-setup.php')) !== trim(file_get_contents('/tmp/composer-setup.sig'))) { unlink('/tmp/composer-setup.php'); echo 'Invalid installer' . PHP_EOL; exit(1); }"; \
     php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer; \
     rm /tmp/composer-setup.php; \
-    chmod +x /usr/local/bin/composer;
+    chmod +x /usr/local/bin/composer; \
+    composer global require hirak/prestissimo;
 
 RUN mkdir -p /root/.composer
 

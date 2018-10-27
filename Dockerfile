@@ -35,6 +35,7 @@ RUN pecl install xdebug redis \
     && docker-php-source delete
 
 COPY docker-php-entrypoint /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-php-entrypoint
 
 RUN {  \
     echo ';;;;;;;;;; Recommended PHP.ini settings ;;;;;;;;;;'; \

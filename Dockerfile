@@ -1,7 +1,6 @@
 FROM php:7.1-apache
 
-RUN apt-get update \
-  && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libicu-dev \
     libjpeg62-turbo-dev \
@@ -15,7 +14,7 @@ RUN apt-get update \
     psmisc \
     ssmtp \
     mysql-client \
-  && apt-get clean
+    && apt-get clean
 
 RUN docker-php-ext-configure \
     gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/; \
@@ -31,8 +30,8 @@ RUN docker-php-ext-configure \
     opcache \
     soap
     
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug \
+RUN pecl install xdebug redis \
+    && docker-php-ext-enable xdebug redis \
     && docker-php-source delete
 
 COPY docker-php-entrypoint /usr/local/bin/

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# original script by https://gist.github.com/titpetric/114eb27f6e453e3e8849d65ca1a3d360
+# set reasonable defaults for ssmtp
+
+SSMTP_SERVER=${SSMTP_SERVER:-smtp.gmail.com}
+SSMTP_PORT=${SSMTP_PORT:-587}
+SSMTP_HOSTNAME=${SSMTP_HOSTNAME:-localhost}
+SSMTP_FROM=${SSMTP_FROM:-USERNAME@HOSTNAME}
+
+# root=$SSMTP_TO
+cat << EOF > /etc/ssmtp/ssmtp.conf
+mailhub=$SSMTP_SERVER:$SSMTP_PORT
+hostname=$SSMTP_HOSTNAME
+FromLineOverride=YES
+EOF
+
+# https://github.com/docker-library/php/blob/master/7.1/stretch/apache/docker-php-entrypoint
+# Add default official image command
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+	set -- apache2-foreground "$@"
+fi
+
+exec "$@"

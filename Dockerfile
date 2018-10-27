@@ -13,6 +13,7 @@ RUN apt-get update \
     wget \
     lynx \
     psmisc \
+    ssmtp \
     mysql-client \
   && apt-get clean
 
@@ -34,9 +35,7 @@ RUN pecl install xdebug \
     && docker-php-ext-enable xdebug \
     && docker-php-source delete
 
-RUN wget https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 && \
-    chmod +x mhsendmail_linux_amd64  && \
-    mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail
+COPY docker-php-entrypoint /usr/local/bin/
 
 RUN {  \
     echo ';;;;;;;;;; Recommended PHP.ini settings ;;;;;;;;;;'; \
@@ -57,7 +56,7 @@ RUN {  \
     echo 'xdebug.max_nesting_level = 256'; \
     echo ';xdebug.remote_cookie_expire_time = -9999'; \
     echo ';;;;;;;;;; Mailhog ;;;;;;;;;;'; \ 
-    echo 'sendmail_path = /usr/local/bin/mhsendmail'; \   
+    echo 'sendmail_path = /usr/sbin/ssmtp -t'; \   
 	} >> /usr/local/etc/php/conf.d/custom-php-settings.ini	
 
 RUN usermod -u 1000 www-data; \

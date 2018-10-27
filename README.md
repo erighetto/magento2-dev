@@ -27,6 +27,7 @@ Magento 2 development environment featuring:
               - SSMTP_PORT=1025
               - SSMTP_HOSTNAME=apache
               - SSMTP_FROM=magento2@apache 
+              - SSMTP_TO=root
         
           db:
             image: mariadb

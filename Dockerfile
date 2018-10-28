@@ -1,6 +1,7 @@
 FROM php:7.1-apache
 
 RUN apt-get update && apt-get install -y \
+    cron \
     libfreetype6-dev \
     libicu-dev \
     libjpeg62-turbo-dev \

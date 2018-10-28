@@ -3,8 +3,8 @@
 # original script by https://gist.github.com/titpetric/114eb27f6e453e3e8849d65ca1a3d360
 # set reasonable defaults for ssmtp
 
-SSMTP_SERVER=${SSMTP_SERVER:-smtp.gmail.com}
-SSMTP_PORT=${SSMTP_PORT:-587}
+SSMTP_SERVER=${SSMTP_SERVER:-mailhog}
+SSMTP_PORT=${SSMTP_PORT:-1025}
 SSMTP_HOSTNAME=${SSMTP_HOSTNAME:-localhost}
 SSMTP_TO=${SSMTP_TO:-postmaster}
 

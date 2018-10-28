@@ -6,7 +6,7 @@
 SSMTP_SERVER=${SSMTP_SERVER:-smtp.gmail.com}
 SSMTP_PORT=${SSMTP_PORT:-587}
 SSMTP_HOSTNAME=${SSMTP_HOSTNAME:-localhost}
-SSMTP_TO=${SSMTP_TO:-root}
+SSMTP_TO=${SSMTP_TO:-postmaster}
 
 cat << EOF > /etc/ssmtp/ssmtp.conf
 root=$SSMTP_TO

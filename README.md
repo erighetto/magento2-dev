@@ -23,11 +23,10 @@ Magento 2 development environment featuring:
               - ./../httpdocs:/var/www/html:cached
               - ~/.composer/auth.json:/root/.composer/auth.json
             environment:
-              - SSMTP_SERVER=mailhog
-              - SSMTP_PORT=1025
-              - SSMTP_HOSTNAME=apache
-              - SSMTP_FROM=magento2@apache 
-              - SSMTP_TO=root
+              SSMTP_SERVER: mailhog
+              SSMTP_PORT: 1025
+              SSMTP_HOSTNAME: apache
+              SSMTP_FROM: magento2@apache
         
           db:
             image: mariadb
@@ -36,10 +35,10 @@ Magento 2 development environment featuring:
             volumes_from:
               - dbdata
             environment:
-              - MYSQL_ROOT_PASSWORD=magento2
-              - MYSQL_DATABASE=magento2
-              - MYSQL_USER=magento2
-              - MYSQL_PASSWORD=magento2
+              MYSQL_ROOT_PASSWORD: magento2
+              MYSQL_DATABASE: magento2
+              MYSQL_USER: magento2
+              MYSQL_PASSWORD: magento2
         
           dbdata:
             image: tianon/true

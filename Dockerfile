@@ -8,7 +8,11 @@ RUN apt-get update && apt-get install -y \
     libmcrypt-dev \
     libpng-dev \
     libxslt1-dev \
-    git \
+    git \ 
+    patch \ 
+    unzip \ 
+    zip \ 
+    libzip-dev \
     nano \
     wget \
     lynx \

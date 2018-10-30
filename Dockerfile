@@ -18,8 +18,7 @@ RUN apt-get update && apt-get install -y \
     lynx \
     psmisc \
     ssmtp \
-    mysql-client \
-    && apt-get clean
+    mysql-client
 
 RUN docker-php-ext-configure \
     gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/; \
@@ -39,6 +38,10 @@ RUN pecl install xdebug redis \
     && docker-php-ext-enable xdebug redis \
     && docker-php-source delete
 
+RUN apt-get clean && \
+    apt-get autoremove && \
+    rm -rf /var/lib/apt/lists/*    
+
 COPY docker-php-entrypoint /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-php-entrypoint
 
@@ -51,15 +54,14 @@ RUN {  \
     echo 'date.timezone = Europe/Rome'; \
     echo 'error_reporting = E_ALL & ~E_NOTICE & ~E_WARNING'; \
     echo ';;;;;;;;;; xDebug ;;;;;;;;;;'; \
-    echo 'xdebug.remote_enable = 1'; \
+    echo 'xdebug.remote_host = "host.docker.internal"'; \
     echo 'xdebug.idekey = "phpstorm"'; \
+    echo 'xdebug.default_enable = 1'; \
+    echo 'xdebug.remote_autostart = 1'; \
+    echo 'xdebug.remote_connect_back = 0'; \
+    echo 'xdebug.remote_enable = 1'; \
+    echo 'xdebug.remote_handler = "dbgp"'; \
     echo 'xdebug.remote_port = 9000'; \
-    echo 'xdebug.remote_autostart = 0'; \
-    echo 'xdebug.profiler_enable = 0'; \
-    echo 'xdebug.remote_connect_back = 1'; \
-    echo 'xdebug.remote_handler=dbgp'; \
-    echo 'xdebug.max_nesting_level = 256'; \
-    echo ';xdebug.remote_cookie_expire_time = -9999'; \
     echo ';;;;;;;;;; Mailhog ;;;;;;;;;;'; \ 
     echo 'sendmail_path = /usr/sbin/ssmtp -t'; \   
 	} >> /usr/local/etc/php/conf.d/custom-php-settings.ini	
@@ -73,8 +75,6 @@ RUN usermod -u 1000 www-data; \
     rm /tmp/composer-setup.php; \
     chmod +x /usr/local/bin/composer; \
     composer global require hirak/prestissimo;
-
-RUN mkdir -p /root/.composer
 
 EXPOSE 80 443 9000
 

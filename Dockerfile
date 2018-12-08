@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     libmcrypt-dev \
     libpng-dev \
     libxslt1-dev \
+    libsodium-dev \
     git \ 
     patch \ 
     unzip \ 

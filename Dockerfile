@@ -1,4 +1,4 @@
-FROM php:7.1-apache
+FROM php:7.2-apache
 
 RUN apt-get update && apt-get install -y \
     cron \
@@ -27,15 +27,14 @@ RUN docker-php-ext-configure \
     gd \
     intl \
     mbstring \
-    mcrypt \
     pdo_mysql \
     xsl \
     zip \
     opcache \
     soap
     
-RUN pecl install xdebug redis \
-    && docker-php-ext-enable xdebug redis \
+RUN pecl install xdebug redis libsodium \
+    && docker-php-ext-enable xdebug redis libsodium \
     && docker-php-source delete
 
 RUN apt-get clean && \

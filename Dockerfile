@@ -35,7 +35,7 @@ RUN docker-php-ext-configure \
     soap
     
 RUN pecl install xdebug redis libsodium \
-    && docker-php-ext-enable xdebug redis libsodium \
+    && docker-php-ext-enable xdebug redis sodium \
     && docker-php-source delete
 
 RUN apt-get clean && \

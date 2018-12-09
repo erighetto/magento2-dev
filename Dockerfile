@@ -76,6 +76,10 @@ RUN usermod -u 1000 www-data; \
     chmod +x /usr/local/bin/composer; \
     composer global require hirak/prestissimo;
 
+RUN curl -o n98-magerun2.phar http://files.magerun.net/n98-magerun2-latest.phar; \
+    chmod +x ./n98-magerun2.phar; \
+    mv n98-magerun2.phar /usr/local/bin/n98-magerun;    
+
 EXPOSE 80 443 9000
 
 WORKDIR /var/www/html

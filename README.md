@@ -24,7 +24,6 @@ Magento 2 development environment featuring:
           - ./../httpdocs:/var/www/html:cached
           - ~/.composer/auth.json:/root/.composer/auth.json
         environment:
-          SSMTP_HOSTNAME: apache
           PHP_IDE_CONFIG: "serverName=magento2"
     
       db:

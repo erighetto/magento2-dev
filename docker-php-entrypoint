@@ -26,7 +26,7 @@ account default :
 
 EOF
 
-# https://github.com/docker-library/php/blob/master/7.2/stretch/apache/docker-php-entrypoint
+# https://github.com/docker-library/php/blob/master/7.2/buster/apache/docker-php-entrypoint
 # Add default official image command
 
 # first arg is `-f` or `--some-option`

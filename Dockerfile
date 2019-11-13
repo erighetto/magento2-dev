@@ -2,6 +2,7 @@ FROM php:7.2-apache
 
 RUN apt-get update && apt-get install -y \
     cron \
+    ca-certificates \
     libfreetype6-dev \
     libicu-dev \
     libjpeg62-turbo-dev \
@@ -18,7 +19,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     lynx \
     psmisc \
-    ssmtp \
+    msmtp \
     mysql-client
 
 RUN docker-php-ext-configure \
@@ -63,7 +64,7 @@ RUN {  \
     echo 'xdebug.remote_handler = "dbgp"'; \
     echo 'xdebug.remote_port = 9000'; \
     echo ';;;;;;;;;; Mailhog ;;;;;;;;;;'; \ 
-    echo 'sendmail_path = /usr/sbin/ssmtp -t'; \   
+    echo 'sendmail_path = "/usr/bin/msmtp -C /etc/msmtprc -a -t"'; \   
 	} >> /usr/local/etc/php/conf.d/custom-php-settings.ini	
 
 RUN usermod -u 1000 www-data; \

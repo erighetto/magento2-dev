@@ -1,18 +1,29 @@
 #!/bin/bash
 
-# original script by https://gist.github.com/titpetric/114eb27f6e453e3e8849d65ca1a3d360
-# set reasonable defaults for ssmtp
+# set reasonable defaults for msmtp
 
-SSMTP_SERVER=${SSMTP_SERVER:-mailhog}
-SSMTP_PORT=${SSMTP_PORT:-1025}
-SSMTP_HOSTNAME=${SSMTP_HOSTNAME:-localhost}
-SSMTP_TO=${SSMTP_TO:-postmaster}
+MSMTP_SERVER=${SSMTP_SERVER:-mailhog}
+MSMTP_PORT=${SSMTP_PORT:-1025}
 
-cat << EOF > /etc/ssmtp/ssmtp.conf
-root=$SSMTP_TO
-mailhub=$SSMTP_SERVER:$SSMTP_PORT
-hostname=$SSMTP_HOSTNAME
-FromLineOverride=YES
+cat << EOF > /etc/msmtprc
+# Set defaults.
+defaults
+# Enable or disable TLS/SSL encryption.
+tls on
+tls_starttls on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+# Setup WP account's settings.
+account 
+host $MSMTP_SERVER
+port $MSMTP_PORT
+auth off
+user 
+password 
+from 
+logfile /var/log/msmtp/msmtp.log
+
+account default : 
+
 EOF
 
 # https://github.com/docker-library/php/blob/master/7.2/stretch/apache/docker-php-entrypoint

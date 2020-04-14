@@ -3,7 +3,7 @@ Magento 2 development environment featuring:
 * composer
 * xdebug
 * redis
-* ssmtp
+* msmtp
 * apache
 
 # docker-compose.yml sample

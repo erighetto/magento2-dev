@@ -50,6 +50,7 @@ RUN {  \
     echo 'upload_max_filesize = 64M'; \
     echo 'post_max_size = 64M'; \
     echo 'max_execution_time = 18000'; \
+    echo 'max_input_vars = 75000 '; \
     echo 'date.timezone = Europe/Rome'; \
     echo 'error_reporting = E_ALL & ~E_NOTICE & ~E_WARNING'; \
     echo ';;;;;;;;;; xDebug ;;;;;;;;;;'; \

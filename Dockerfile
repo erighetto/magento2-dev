@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:7.3-apache
 
 RUN apt-get update && apt-get install -y \
     cron \
@@ -77,7 +77,7 @@ RUN usermod -u 1000 www-data; \
     chmod +x /usr/local/bin/composer; \
     composer global require hirak/prestissimo;
 
-RUN curl -o n98-magerun2.phar http://files.magerun.net/n98-magerun2-latest.phar; \
+RUN curl -o n98-magerun2.phar https://files.magerun.net/n98-magerun2-latest.phar; \
     chmod +x ./n98-magerun2.phar; \
     mv n98-magerun2.phar /usr/local/bin/n98-magerun;    
 

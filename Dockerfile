@@ -32,7 +32,9 @@ RUN docker-php-ext-configure \
     zip \
     opcache \
     soap
-    
+
+RUN docker-php-ext-install sockets
+
 RUN pecl install xdebug redis libsodium \
     && docker-php-ext-enable xdebug redis sodium \
     && docker-php-source delete

@@ -1,5 +1,7 @@
 FROM php:7.3-apache
 
+ENV APACHE_DOCUMENT_ROOT /var/www/html
+
 RUN apt-get update && apt-get install -y \
     cron \
     default-mysql-client \

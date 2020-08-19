@@ -26,7 +26,15 @@ account default :
 
 EOF
 
-# https://github.com/docker-library/php/blob/master/7.2/buster/apache/docker-php-entrypoint
+# Change Apache document root if needed
+APACHE_DOCUMENT_ROOT=${APACHE_DOCUMENT_ROOT:-/var/www/html}
+if [[ $APACHE_DOCUMENT_ROOT != "/var/www/html" ]]
+	then
+		sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+fi
+
+
+# https://github.com/docker-library/php/blob/master/7.3/buster/apache/docker-php-entrypoint
 # Add default official image command
 
 # first arg is `-f` or `--some-option`

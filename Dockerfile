@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y \
     libjpeg62-turbo-dev \
     libmcrypt-dev \
     libpng-dev \
-    libsodium-dev \
     libxslt1-dev \
     libzip-dev \
     lynx \
@@ -37,8 +36,8 @@ RUN docker-php-ext-configure \
 
 RUN docker-php-ext-install sockets
 
-RUN pecl install xdebug redis libsodium \
-    && docker-php-ext-enable xdebug redis sodium \
+RUN pecl install xdebug redis \
+    && docker-php-ext-enable xdebug redis \
     && docker-php-source delete
 
 RUN apt-get clean && \

@@ -36,7 +36,7 @@ RUN docker-php-ext-configure \
 
 RUN docker-php-ext-install sockets
 
-RUN pecl install xdebug redis \
+RUN pecl install xdebug-2.9.8 redis \
     && docker-php-ext-enable xdebug redis \
     && docker-php-source delete
 

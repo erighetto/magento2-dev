@@ -1,6 +1,15 @@
 FROM php:7.3-apache
 
-ENV APACHE_DOCUMENT_ROOT /var/www/html
+ENV APACHE_DOCUMENT_ROOT=/var/www/html  \
+    APACHE_PORT=80 \
+    APACHE_SECURE_PORT=443 \
+    APACHE_SERVER_NAME=default \
+    SSMTP_SERVER=mailhog \
+    SSMTP_PORT=1025 \
+    PHP_MEMORY_LIMIT=756M \
+    PHP_MAX_EXECUTION_TIME=18000 \
+    PHP_UPLOAD_MAX_FILESIZE=64M \
+    PHP_POST_MAX_SIZE=64M
 
 RUN apt-get update && apt-get install -y \
     cron \
@@ -47,32 +56,10 @@ RUN apt-get clean && \
 COPY docker-php-entrypoint /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-php-entrypoint
 
-RUN {  \
-    echo ';;;;;;;;;; Recommended PHP.ini settings ;;;;;;;;;;'; \
-    echo 'memory_limit = 768M'; \
-    echo 'upload_max_filesize = 64M'; \
-    echo 'post_max_size = 64M'; \
-    echo 'max_execution_time = 18000'; \
-    echo 'max_input_vars = 200000'; \
-    echo 'max_input_time = 600'; \
-    echo 'date.timezone = Europe/Rome'; \
-    echo 'error_reporting = E_ALL & ~E_NOTICE & ~E_WARNING'; \
-    echo ';;;;;;;;;; xDebug ;;;;;;;;;;'; \
-    echo 'xdebug.remote_host = "host.docker.internal"'; \
-    echo 'xdebug.idekey = "phpstorm"'; \
-    echo 'xdebug.default_enable = 1'; \
-    echo 'xdebug.remote_autostart = 1'; \
-    echo 'xdebug.remote_connect_back = 0'; \
-    echo 'xdebug.remote_enable = 1'; \
-    echo 'xdebug.remote_handler = "dbgp"'; \
-    echo 'xdebug.remote_port = 9000'; \
-    echo ';;;;;;;;;; Mailhog ;;;;;;;;;;'; \ 
-    echo 'sendmail_path = "/usr/bin/msmtp -C /etc/msmtprc -a -t"'; \   
-	} >> /usr/local/etc/php/conf.d/custom-php-settings.ini	
-
 RUN usermod -u 1000 www-data; \
-    a2enmod rewrite; \
-    curl -o /tmp/composer-setup.php https://getcomposer.org/installer; \
+    a2enmod rewrite ssl;
+    
+RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer; \
     curl -o /tmp/composer-setup.sig https://composer.github.io/installer.sig; \
     php -r "if (hash('SHA384', file_get_contents('/tmp/composer-setup.php')) !== trim(file_get_contents('/tmp/composer-setup.sig'))) { unlink('/tmp/composer-setup.php'); echo 'Invalid installer' . PHP_EOL; exit(1); }"; \
     php /tmp/composer-setup.php --no-ansi --1 --install-dir=/usr/local/bin --filename=composer; \
@@ -83,6 +70,12 @@ RUN usermod -u 1000 www-data; \
 RUN curl -o n98-magerun2.phar https://files.magerun.net/n98-magerun2-latest.phar; \
     chmod +x ./n98-magerun2.phar; \
     mv n98-magerun2.phar /usr/local/bin/n98-magerun;    
+
+RUN gotpl_url="https://github.com/wodby/gotpl/releases/download/0.1.5/gotpl-alpine-linux-amd64-0.1.5.tar.gz"; \
+    wget -qO- "${gotpl_url}" | tar xz -C /usr/local/bin;
+
+COPY templates /etc/gotpl/
+COPY .bashrc /root/.bashrc
 
 EXPOSE 80 443 9000
 

@@ -26,12 +26,19 @@ account default :
 
 EOF
 
-# Change Apache document root if needed
-APACHE_DOCUMENT_ROOT=${APACHE_DOCUMENT_ROOT:-/var/www/html}
-if [[ $APACHE_DOCUMENT_ROOT != "/var/www/html" ]]
-	then
-		sed -ri -e "s|/var/www/html|${APACHE_DOCUMENT_ROOT}|g" /etc/apache2/sites-available/*.conf
-fi
+_gotpl() {
+    if [[ -f "/etc/gotpl/$1" ]]; then
+        gotpl "/etc/gotpl/$1" > "$2"
+    fi
+}
+
+process_templates() {
+    _gotpl "vhost.conf.tmpl" "/etc/apache2/sites-available/000-default.conf"
+	_gotpl "vhostssl.conf.tmpl" "/etc/apache2/sites-available/default-ssl.conf"
+	_gotpl "php.settings.tmpl" "/usr/local/etc/php/conf.d/custom-php-settings.ini"
+}
+
+process_templates
 
 
 # https://github.com/docker-library/php/blob/master/7.3/buster/apache/docker-php-entrypoint

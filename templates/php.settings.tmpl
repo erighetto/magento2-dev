@@ -1,0 +1,20 @@
+;;;;;;;;;; Recommended PHP.ini settings ;;;;;;;;;;
+memory_limit = {{ getenv "PHP_MEMORY_LIMIT" "756M" }}
+upload_max_filesize = {{ getenv "PHP_UPLOAD_MAX_FILESIZE" "64M" }}
+post_max_size = {{ getenv "PHP_POST_MAX_SIZE" "64M" }}
+max_execution_time = {{ getenv "PHP_MAX_EXECUTION_TIME" "18000" }}
+max_input_vars = 200000
+max_input_time = 600
+date.timezone = Europe/Rome
+error_reporting = E_ALL & ~E_NOTICE & ~E_WARNING
+;;;;;;;;;; xDebug ;;;;;;;;;;
+xdebug.remote_host = "host.docker.internal"
+xdebug.idekey = "phpstorm"
+xdebug.default_enable = 1
+xdebug.remote_autostart = 1
+xdebug.remote_connect_back = 0
+xdebug.remote_enable = 1
+xdebug.remote_handler = "dbgp"
+xdebug.remote_port = 9000
+;;;;;;;;;; Mailhog ;;;;;;;;;; 
+sendmail_path = "/usr/bin/msmtp -C /etc/msmtprc -a -t" 

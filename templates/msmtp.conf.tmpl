@@ -1,0 +1,17 @@
+# Set defaults.
+defaults
+# Enable or disable TLS/SSL encryption.
+tls on
+tls_starttls on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+# Setup WP account's settings.
+account 
+host {{ getenv "MSMTP_SERVER" "mailhog" }}
+port {{ getenv "MSMTP_PORT" "1025" }}
+auth off
+user 
+password 
+from 
+logfile /var/log/msmtp/msmtp.log
+
+account default : 

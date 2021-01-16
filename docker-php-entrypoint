@@ -1,30 +1,25 @@
 #!/bin/bash
 
-# set reasonable defaults for msmtp
+set -e
 
-MSMTP_SERVER=${SSMTP_SERVER:-mailhog}
-MSMTP_PORT=${SSMTP_PORT:-1025}
+if [[ -n "${DEBUG}" ]]; then
+    set -x
+fi
 
-cat << EOF > /etc/msmtprc
-# Set defaults.
-defaults
-# Enable or disable TLS/SSL encryption.
-tls on
-tls_starttls on
-tls_trust_file /etc/ssl/certs/ca-certificates.crt
-# Setup WP account's settings.
-account 
-host $MSMTP_SERVER
-port $MSMTP_PORT
-auth off
-user 
-password 
-from 
-logfile /var/log/msmtp/msmtp.log
+# Backwards compatibility for old env vars names.
+_backwards_compatibility() {
+    declare -A vars
+    # vars[DEPRECATED]="ACTUAL"
+    vars[SSMTP_SERVERT]="MSMTP_SERVER"
+    vars[SSMTP_PORT]="MSMTP_PORT"
 
-account default : 
-
-EOF
+    for i in "${!vars[@]}"; do
+        # Use value from old var if it's not empty and the new is.
+        if [[ -n "${!i}" && -z "${!vars[$i]}" ]]; then
+            export ${vars[$i]}="${!i}"
+        fi
+    done
+}
 
 _gotpl() {
     if [[ -f "/etc/gotpl/$1" ]]; then
@@ -33,13 +28,14 @@ _gotpl() {
 }
 
 process_templates() {
+    _backwards_compatibility
+    _gotpl "msmtp.conf.tmpl" "/etc/msmtprc"
     _gotpl "vhost.conf.tmpl" "/etc/apache2/sites-available/000-default.conf"
 	_gotpl "vhostssl.conf.tmpl" "/etc/apache2/sites-available/default-ssl.conf"
 	_gotpl "php.settings.tmpl" "/usr/local/etc/php/conf.d/custom-php-settings.ini"
 }
 
 process_templates
-
 
 # https://github.com/docker-library/php/blob/master/7.3/buster/apache/docker-php-entrypoint
 # Add default official image command

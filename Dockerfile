@@ -4,8 +4,8 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html  \
     APACHE_PORT=80 \
     APACHE_SECURE_PORT=443 \
     APACHE_SERVER_NAME=default \
-    SSMTP_SERVER=mailhog \
-    SSMTP_PORT=1025 \
+    MSMTP_SERVER=mailhog \
+    MSMTP_PORT=1025 \
     PHP_MEMORY_LIMIT=756M \
     PHP_MAX_EXECUTION_TIME=18000 \
     PHP_UPLOAD_MAX_FILESIZE=64M \
@@ -54,6 +54,7 @@ RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*    
 
 COPY docker-php-entrypoint /usr/local/bin/
+
 RUN chmod +x /usr/local/bin/docker-php-entrypoint
 
 RUN usermod -u 1000 www-data; \
@@ -75,8 +76,9 @@ RUN gotpl_url="https://github.com/wodby/gotpl/releases/download/0.1.5/gotpl-alpi
     wget -qO- "${gotpl_url}" | tar xz -C /usr/local/bin;
 
 COPY templates /etc/gotpl/
+
 COPY .bashrc /root/.bashrc
 
-EXPOSE 80 443 9000
+EXPOSE 80 443
 
 WORKDIR /var/www/html

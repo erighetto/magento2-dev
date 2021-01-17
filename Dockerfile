@@ -10,7 +10,7 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html  \
     PHP_MAX_EXECUTION_TIME=18000 \
     PHP_UPLOAD_MAX_FILESIZE=64M \
     PHP_POST_MAX_SIZE=64M \
-    PHP_IDE_CONFIG=localhost
+    PHP_IDE_CONFIG="serverName=localhost"
 
 RUN apt-get update && apt-get install -y \
     cron \

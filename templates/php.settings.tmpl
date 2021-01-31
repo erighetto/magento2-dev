@@ -8,13 +8,11 @@ max_input_time = 600
 date.timezone = Europe/Rome
 error_reporting = E_ALL & ~E_NOTICE & ~E_WARNING
 ;;;;;;;;;; xDebug ;;;;;;;;;;
-xdebug.remote_host = "host.docker.internal"
+xdebug.mode = debug
 xdebug.idekey = "phpstorm"
-xdebug.default_enable = 1
-xdebug.remote_autostart = 1
-xdebug.remote_connect_back = 0
-xdebug.remote_enable = 1
-xdebug.remote_handler = "dbgp"
-xdebug.remote_port = 9000
+xdebug.start_with_request = 1
+xdebug.discover_client_host = 0
+xdebug.client_port = 9000
+xdebug.client_host = "host.docker.internal"
 ;;;;;;;;;; Mailhog ;;;;;;;;;; 
 sendmail_path = "/usr/bin/msmtp -C /etc/msmtprc -a -t" 

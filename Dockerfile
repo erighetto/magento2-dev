@@ -1,4 +1,4 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html  \
     APACHE_PORT=80 \
@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libxslt1-dev \
     libzip-dev \
+    libonig-dev \
     lynx \
     msmtp \
     nano \
@@ -46,7 +47,7 @@ RUN docker-php-ext-configure \
 
 RUN docker-php-ext-install sockets
 
-RUN pecl install xdebug-2.9.8 redis \
+RUN pecl install xdebug redis \
     && docker-php-ext-enable xdebug redis \
     && docker-php-source delete
 

@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libpng-dev \
     libxslt1-dev \
+    libwebp-dev \
     libzip-dev \
     lynx \
     msmtp \
@@ -34,9 +35,11 @@ RUN apt-get update && apt-get install -y \
     wget \
     zip
 
-RUN docker-php-ext-configure \
-    gd --with-jpeg-dir=/usr/lib64/ --with-png-dir=/usr/lib64/ --with-freetype-dir=/usr/lib64/; \
-    docker-php-ext-install \
+RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
+    docker-php-ext-configure intl; \
+	docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd; \
+	docker-php-ext-configure zip; \
+	docker-php-ext-install -j "$(nproc)" \
     bcmath \
     gd \
     intl \
@@ -45,9 +48,8 @@ RUN docker-php-ext-configure \
     xsl \
     zip \
     opcache \
-    soap
-
-RUN docker-php-ext-install sockets
+    soap \
+    sockets
 
 RUN pecl install xdebug redis \
     && docker-php-ext-enable xdebug redis \

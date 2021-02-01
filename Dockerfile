@@ -1,9 +1,10 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html  \
     APACHE_PORT=80 \
     APACHE_SECURE_PORT=443 \
     APACHE_SERVER_NAME=default \
+    APACHE_HTTP2=1 \
     MSMTP_SERVER=mailhog \
     MSMTP_PORT=1025 \
     PHP_MEMORY_LIMIT=756M \
@@ -20,20 +21,25 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     libjpeg62-turbo-dev \
     libmcrypt-dev \
+    libonig-dev \
     libpng-dev \
     libxslt1-dev \
+    libwebp-dev \
     libzip-dev \
     lynx \
     msmtp \
     nano \
+    nghttp2 \
     psmisc \
     unzip \
     wget \
     zip
 
-RUN docker-php-ext-configure \
-    gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/; \
-    docker-php-ext-install \
+RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
+    docker-php-ext-configure intl; \
+	docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd; \
+	docker-php-ext-configure zip; \
+	docker-php-ext-install -j "$(nproc)" \
     bcmath \
     gd \
     intl \
@@ -42,11 +48,10 @@ RUN docker-php-ext-configure \
     xsl \
     zip \
     opcache \
-    soap
+    soap \
+    sockets
 
-RUN docker-php-ext-install sockets
-
-RUN pecl install xdebug-2.9.8 redis \
+RUN pecl install xdebug redis \
     && docker-php-ext-enable xdebug redis \
     && docker-php-source delete
 
@@ -59,7 +64,7 @@ COPY docker-php-entrypoint /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-php-entrypoint
 
 RUN usermod -u 1000 www-data; \
-    a2enmod rewrite ssl;
+    a2enmod rewrite ssl http2;
     
 RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer; \
     curl -o /tmp/composer-setup.sig https://composer.github.io/installer.sig; \
